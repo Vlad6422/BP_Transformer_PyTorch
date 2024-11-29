@@ -79,6 +79,9 @@ def save_qa_to_txt(qa_pairs, output_file):
     try:
         with open(output_file, 'w', encoding='utf-8') as f:
             for question, answer in qa_pairs:
+                # Check if either question or answer contains '\t', and skip if so
+                if '\t' in question or '\t' in answer:
+                    continue  # Skip this pair
                 f.write(f"{question}\t{answer}\n")  # Tab-separated format
 
         print(Fore.GREEN + "Question-answer pairs saved successfully.")
