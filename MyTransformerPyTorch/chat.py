@@ -1,3 +1,4 @@
+import os
 import torch
 from transformers import AutoTokenizer
 from model import Transformer
@@ -30,33 +31,26 @@ def load_model(config, model_path, tokenizer):
 def generate_response(model, tokenizer, src_text, config, sos_token, eos_token):
 
     src_tokens = tokenizer.encode(src_text, add_special_tokens=False)
+    max_seq_length = config["max_seq_length"]
+    pad_token = 50258
+
     src_tokens = torch.tensor(src_tokens).unsqueeze(0).to(config["device"])
 
+    if src_tokens.size(1) < max_seq_length:
+        src_tokens = torch.nn.functional.pad(
+            src_tokens, 
+            (0, max_seq_length - src_tokens.size(1)),
+            value=pad_token                           
+        )
     generated_tokens = torch.full((src_tokens.size(0), 1), sos_token, dtype=torch.long).to(config["device"])
-
-
     for _ in range(config["max_seq_length"]):
         with torch.no_grad():
-
             output = model(src_tokens, generated_tokens)
-            
             probs = torch.softmax(output[:, -1, :], dim=-1)
-            print(probs)
             next_token = torch.argmax(probs, dim=-1)
-            print(next_token)
-
             generated_tokens = torch.cat((generated_tokens, next_token.unsqueeze(-1)), dim=-1)
-            output_words = output.argmax(dim=-1) 
-            output_words = output_words.cpu().numpy()
-
-            predicted_sentence = tokenizer.decode(output_words[0], skip_special_tokens=True)
-
-            print(f"Predicted: {predicted_sentence}")
-
-
             if next_token.item() == eos_token:
                 break
-
 
     response_text = tokenizer.decode(generated_tokens.squeeze(0).tolist(), skip_special_tokens=True)
     return response_text
@@ -80,9 +74,8 @@ if __name__ == "__main__":
     device = torch.device(config["device"])
     config["device"] = device
 
-
     tokenizer = AutoTokenizer.from_pretrained("gpt2")
-    model_path = "saved/model.pt"
+    model_path = "saved/model_doctorAI_Big_10.pt"
     special_tokens = {"bos_token": "<sos>", "pad_token": "<pad>"}
     tokenizer.add_special_tokens(special_tokens)
     sos_token = tokenizer.bos_token_id
