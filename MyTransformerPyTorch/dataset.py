@@ -1,3 +1,8 @@
+# Author: Malashchuk Vladyslav
+# File: dataset.py
+# Description: This file contains the implementation of a custom dataset class for chat-based tokenized inputs and targets.
+
+
 import torch
 from torch.utils.data import Dataset
 class ChatDataset(Dataset):

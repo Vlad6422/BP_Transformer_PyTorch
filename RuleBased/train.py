@@ -1,7 +1,11 @@
+# Author: Malashchuk Vladyslav
+# File: train.py
+# Description: This file contains the implementation of training the neural network model for a chatbot.
+
 import numpy as np
 import random
 import json
-import matplotlib.pyplot as plt  # Import matplotlib
+import matplotlib.pyplot as plt
 
 import torch
 import torch.nn as nn

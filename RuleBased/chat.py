@@ -1,3 +1,7 @@
+# Author: Malashchuk Vladyslav
+# File: chat.py
+# Description: This file contains the implementation of chatting with the trained neural network model.
+
 import random
 import json
 import torch
@@ -28,27 +32,30 @@ model.eval()
 
 bot_name = "Bot"
 print("Let's chat! (type 'quit' to exit)")
-
+# Keep the conversation going until the user types 'quit'
 while True:
     sentence = input("You: ")
     if sentence.lower() == "quit":
         break
 
-    
+    # Tokenize the input sentence
     sentence = tokenize(sentence)
+    # Stem each word and create a bag of words
     X = bag_of_words(sentence, all_words)
+    # Convert to tensor
     X = X.reshape(1, X.shape[0])
+    # Convert to float tensor and move to device
     X = torch.from_numpy(X).to(device)
 
-    
+    # Get the model's prediction
     output = model(X)
     _, predicted = torch.max(output, dim=1)
 
-    
+    # Get the predicted tag and its probability
     tag = tags[predicted.item()]
     probs = torch.softmax(output, dim=1)
     prob = probs[0][predicted.item()]
-    print(tag)
+    
     if prob.item() > 0.8:  
         
         all_responses = []

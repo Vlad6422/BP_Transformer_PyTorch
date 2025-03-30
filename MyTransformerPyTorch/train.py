@@ -1,3 +1,7 @@
+# Author: Malashchuk Vladyslav
+# File: train.py
+# Description: This file contains train
+
 import torch
 import json
 import torch.nn as nn

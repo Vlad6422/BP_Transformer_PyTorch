@@ -1,3 +1,8 @@
+# Author: Malashchuk Vladyslav
+# File: metrics.py
+# Description: This file contains the implementation of metrics
+
+
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 from rouge_score import rouge_scorer
 import torch

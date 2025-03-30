@@ -1,4 +1,7 @@
-import os
+# Author: Malashchuk Vladyslav
+# File: chat.py
+# Description: This file contains the implementation of the chat functionality for the Transformer model.
+
 import torch
 from transformers import AutoTokenizer
 from model import Transformer
