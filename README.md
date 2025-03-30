@@ -21,31 +21,41 @@ By following this work, users will learn how to implement a chatbot using **PyTo
 
 This project is a great starting point for anyone looking to understand chatbot development and build their own AI-powered assistant using **PyTorch**. 🚀
 
+My thesis : https://www.vut.cz/en/students/final-thesis/detail/164616
+
 ---
 
 ## 🛠️ Technologies & Libraries  
-- **Frameworks**: PyTorch, Hugging Face Transformers  
-- **Preprocessing**: Tokenization, dataset augmentation, context formatting.  
-- **Models**: GPT-2, LLaMA (implementations included).  
-- **Evaluation**: BLEU, ROUGE, and custom conversational metrics.  
-- **Tools**: Git, JSON configuration, modular code structure.  
 
----
+- **Frameworks**: PyTorch, Hugging Face Transformers  
+- **Preprocessing**: Tokenization, dataset augmentation, context formatting, stemming, bag-of-words processing  
+- **Models**: GPT-2, LLaMA, Transformer, NeuralNet (implementations included)  
+- **Evaluation**: BLEU, ROUGE, and custom conversational metrics  
+- **Tools**: Git, JSON configuration, modular code structure, dataset processing  
+
+### 🔧 Included Python Libraries  
+- **Data Handling**: `json`, `pandas`, `datasets`, `random`  
+- **Deep Learning**: `torch`, `torch.nn`, `torch.optim`, `torch.utils.data`  
+- **Transformers**: `AutoTokenizer`, `AutoModelForCausalLM`, `transformers.pipeline`  
+- **Text Processing**: `nltk`, `nltk.stem.porter`, `re`  
+- **Evaluation Metrics**: `nltk.translate.bleu_score`, `rouge_score.rouge_scorer`, `metrics.calculate_bleu`, `metrics.calculate_rouge`  
+- **Modeling**: `model.Transformer`, `model.NeuralNet`  
+- **Utilities**: `matplotlib.pyplot`, `time`, `math`, `sklearn.model_selection.train_test_split`  
+- **Dataset Processing**: `dataset.process_tab_separated_file`, `dataset.ChatDataset`  
+
 
 ---
 
 ## ⚙️ Installation  
 1. Clone the repository:  
    ```bash
-   git clone [repository-url] && cd Chatbot-Based-On-Deep-Neural-Networks
+   git clone https://github.com/Vlad6422/BP_Transformer_PyTorch.git
    ```
 2. Install dependencies:  
    ```bash
    pip install -r requirements.txt
    ```
-   *Key packages*: `torch`, `transformers`, `datasets`, `numpy`, `tqdm`.  
 
-3. Download pre-trained weights (e.g., GPT-2) and place them in the `Pretrained/` directory.  
 
 ---
 
