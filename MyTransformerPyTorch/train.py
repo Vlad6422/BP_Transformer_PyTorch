@@ -50,7 +50,7 @@ print("PAD : ", pad_token_id)
 print("SOS : ", sos_token)
 print("EOS : ", eos_token)
 
-questions, answers = process_tab_separated_file("datasets/Eazy.txt")
+questions, answers = process_tab_separated_file(config["dataset_path"])
 
 # Print the results for verification
 print(f"Total questions: {len(questions)}")
@@ -158,7 +158,7 @@ for epoch in range(num_epochs):
     print(f'\tTrain Loss: {train_loss:.3f} | Train PPL: {math.exp(train_loss):7.3f}')
     print(f'\tVal Loss: {val_loss:.3f} | Val PPL: {math.exp(val_loss):7.3f}')
     print(f'\tVal BLEU: {val_bleu:.3f} | Val ROUGE: {val_rouge:.3f}')
-    torch.save(model.state_dict(), f'saved/model_Doctor_Test_1_{epoch+1}.pt')
+    torch.save(model.state_dict(), f'{config["save_model_path"]}_{epoch+1}.pt')
 
     plt.figure()
     plt.plot(range(1, epoch+2), train_losses, label='Train Loss')

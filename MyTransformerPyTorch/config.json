@@ -5,10 +5,13 @@
   "num_encoder_layers": 2,
   "num_decoder_layers": 2,
   "dim_feedforward": 512,
-  "max_seq_length": 100,
+  "max_seq_length": 20,
   "dropout": 0.1,
-  "batch_size": 10,
+  "batch_size": 20,
   "learning_rate": 0.001,
-  "num_epochs": 100,
-  "device": "cuda"
+  "num_epochs": 5,
+  "device": "cuda",
+
+  "dataset_path": "datasets/ChitChat.txt",
+  "save_model_path": "saved/model_Doctor"
 }
