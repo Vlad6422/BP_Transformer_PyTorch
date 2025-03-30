@@ -1,0 +1,3 @@
+Dataset is too big ~150MB
+Please use command "python MyTransformerPyTorch\DatasetsProcess\Doctor_AI_dataset.py"
+Or if you are in directory "MyTransformerPyTorch\DatasetsProcess\" use "python Doctor_AI_dataset.py"
