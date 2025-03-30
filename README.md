@@ -6,10 +6,8 @@
 
 ---
 
-
-
 ## 📝 Project Description  
-This bachelor's thesis introduces chatbot development, explaining how different architectures work and how to create your own chatbot using **PyTorch**. The project covers both **retrieval-based models** (simpler, rule-based chatbots) and **transformer-based models** (such as GPT-2 and LLaMA).
+This bachelor's thesis introduces chatbot development, explaining how different architectures work and how to create your own chatbot using **PyTorch**. The project covers both **retrieval-based models** (simpler, rule-based chatbots) and **transformer-based models** (such as GPT and LLaMA).
 
 By following this work, users will learn how to implement a chatbot using **PyTorch**, train models on different datasets, and experiment with both basic and advanced architectures.  
 
@@ -21,7 +19,7 @@ By following this work, users will learn how to implement a chatbot using **PyTo
 
 This project is a great starting point for anyone looking to understand chatbot development and build their own AI-powered assistant using **PyTorch**. 🚀
 
-My thesis : https://www.vut.cz/en/students/final-thesis/detail/164616
+My thesis: [Chatbot Based on Deep Neural Networks - VUT](https://www.vut.cz/en/students/final-thesis/detail/164616)
 
 ---
 
@@ -43,40 +41,17 @@ My thesis : https://www.vut.cz/en/students/final-thesis/detail/164616
 - **Utilities**: `matplotlib.pyplot`, `time`, `math`, `sklearn.model_selection.train_test_split`  
 - **Dataset Processing**: `dataset.process_tab_separated_file`, `dataset.ChatDataset`  
 
-
 ---
 
 ## ⚙️ Installation  
 1. Clone the repository:  
    ```bash
    git clone https://github.com/Vlad6422/BP_Transformer_PyTorch.git
-   ```
+   ```  
 2. Install dependencies:  
    ```bash
    pip install -r requirements.txt
-   ```
-
-
----
-
-## 🚀 Usage  
-1. **Training**:  
-   Configure hyperparameters in `config.json` and run:  
-   ```bash
-   python train.py --config config.json
-   ```
-2. **Interactive Chat**:  
-   Start the chatbot with a pre-trained model:  
-   ```bash
-   python chat.py --model gpt2 --temperature 0.7
-   ```
-   *(Adjust `--model` and `--temperature` as needed.)*  
-
-3. **Evaluation**:  
-   Compute metrics using:  
-   ```bash
-   python metrics.py --dataset test_data.jsonl
-   ```
+   ```  
 
 ---
 
@@ -86,7 +61,21 @@ This project is licensed under the terms of the [MIT License](LICENSE).
 ---
 
 ## 🙏 Acknowledgments  
-- Supervisors and faculty members at VUT FIT.  
-- Open-source communities for libraries like Hugging Face Transformers.  
-- Dataset providers (e.g., Cornell Movie-Dialogs Corpus, Persona-Chat).  
+- Special thanks to Ing. Martin Kostelník for his invaluable guidance and support throughout my work.
 
+---
+## REFERENCES
+1. Brown, T. B., Mann, B., Ryder, N., Subbiah, M., Kaplan, J., Dhariwal, P., ... & Amodei, D. (2020). Language models are few-shot learners. Advances in Neural Information Processing Systems, 33, 1877–1901.
+
+2. Devlin, J., Chang, M.-W., Lee, K., & Toutanova, K. (2018). BERT: Pre-training of deep bidirectional transformers for language understanding. Proceedings of the 2019 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies (pp. 4171–4186). Minneapolis, MN: Association for Computational Linguistics.
+
+3. Hugging Face, Inc. (2020). Transformers: State-of-the-art natural language processing [Computer software]. Retrieved from https://huggingface.co
+
+4. Kingma, D. P., & Ba, J. (2014). Adam: A method for stochastic optimization. Proceedings of the 3rd International Conference on Learning Representations. San Diego, CA: ICLR.
+
+5. Pal, A., & Condon, P. (2021, March 15). Designing a conversational AI chatbot. Towards Data Science. Retrieved from https://towardsdatascience.com/designing-a-conversational-ai-chatbot
+
+6. Radford, A., Narasimhan, K., Salimans, T., & Sutskever, I. (2018). Improving language understanding by generative pre-training [Technical report]. OpenAI. Retrieved from https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf
+
+7. Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., ... & Polosukhin, I. (2017). Attention is all you need. Advances in Neural Information Processing Systems, 30, 5998–6008.
+---
