@@ -253,13 +253,67 @@ class Transformer(nn.Module):
         mask = padding_mask.unsqueeze(-1).to(embeddings.device)  # (batch_size, seq_len, 1)
         return embeddings * (~mask)
 ```
-
+You can see the implementation of the model above. It repeats the Transformer model described in Attention is all you need [[1]](https://proceedings.neurips.cc/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf). Below I will also attach a picture on which it is easier to see all the key components of this model. Unlike the previous one, this one is already difficult to implement and is fully able to understand the context of sentences and generate them word by word, creating new answers that differ from each other and adapt to the context of the question. That is, during training, I use a look-ahead mask to close part of the answer to the model and it does not see it. It receives a whole question/prompt and at the beginning it receives the token <SOS>, and it tries to guess the next word after this token, without knowing which answer is correct, after that 2 tokens <SOS> and, for example, "Hello" are revealed to it and it tries to guess the second word that comes after "<SOS>Hello" based on the context until it comes to guessing the token <EOS> which is the token of the end of the sentence, in fact, this is how it learns to finish generation. During this training, its predictions are compared with the reference and the weights are changed. Thus, the model learns to correctly generate words one after another based on the context.
 
 ![Transformer](doc/Transformer.png)
 
- [[1]](https://proceedings.neurips.cc/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf)
+Main components of this architecture:
+
+**Input Embeddings**
+
+Converts input tokens into dense vectors; includes positional encoding to capture word order.
+
+**Positional Encoding**
+
+Adds information about token position since Transformers have no inherent sequence order.
+
+**Multi-Head Self-Attention**
+
+Lets each token attend to every other token; multiple heads capture different relationships.
+
+**Layer Normalization**
+
+Stabilizes and speeds up training by normalizing across features.
+
+**Feed-Forward Neural Network (FFN)**
+
+Applies non-linearity and transformation to each token independently.
+
+**Residual Connections**
+
+Helps gradients flow through deep networks by adding input to the output of sublayers.
+
+**Encoder & Decoder Stacks**
+
+Encoder: Stack of layers with self-attention + FFN.
+
+Decoder: Similar, but includes encoder-decoder attention to focus on encoder outputs.
+
+This model need only reference sentence and answer. So it is more easier to make dataset for it. I trained with big datasets with 300k+ prompt-answer pairs, that will be more harder with Retrieval-Based model duo to it functionality, we dont need make tags for every line of text and this is more advanced approach so it is now not just classifies sentence, but understand it context and generate answer. 
+
 ## Training Validation
 
+All training was assessed for loss and Validation loss, these 2 metrics show how correct the answers are with the reference. In the case of a simple model, this works more clearly, since if it guessed the topic of the question, the answer is selected from the database and will always correspond to the reference, so there are 2 options, either this 0 or 100% match. In the case of the transformer, loss was used to monitor the speed and progress of training, but Validation loss was no longer particularly suitable, since the generated sentences, especially very long ones with 100 or more tokens, often did not match the reference, but still had a clear and correct answer, which was generated based on training on other sentences. So for additional assessment, the metrics described in the next section were used.
+
+We get this numbers in Result:
+
+ChitChat Dataset [[9]](https://github.com/microsoft/botframework-cli/blob/main/packages/qnamaker/docs/chit-chat-dataset.md)
+
+**Retrieval-Based:**
+
+**Epoch 10 result:**
+Loss: 0.0581, Val Loss: 0.5086, Val Accuracy: 88.10%
+
+**Transformer model:**
+| Epoch | Train Loss | Train PPL | Val Loss | Val PPL  | Val BLEU | Val ROUGE |
+|-------|------------|-----------|----------|----------|----------|------------|
+| 0     | 2.432188   | 11.383760 | 0.473431 | 1.605493 | 46.631953 | 69.985203 |
+| 1     | 0.396017   | 1.485895  | 0.306463 | 1.358611 | 60.390638 | 78.028985 |
+| 2     | 0.266338   | 1.305176  | 0.224245 | 1.251377 | 67.882054 | 83.082805 |
+| 3     | 0.197089   | 1.217852  | 0.186329 | 1.204818 | 71.752113 | 86.684866 |
+| 4     | 0.154788   | 1.167410  | 0.151746 | 1.163864 | 74.639021 | 88.014831 |
+
+As a result, you can see the training and you can see that there are results. The values ​​are quite standard, the only thing you want to pay attention to is that the transformer model passed the entire dataset 2 times less, that is, 5 epochs instead of 10, while it answers the same, if not better. And you can notice that Val Loss is reduced more strongly in the transformer, this is due to the fact that it learns the language and writes in it, and in the case of a question that was not during training, it can somehow answer. In the case of Retrieval-Based, it simply chooses an answer so that it is either correct or not.
 ## Metrics
 
 Of the metrics, ROUGE [[8]](https://aclanthology.org/W04-1013.pdf) and BLEU [[7]](https://doi.org/10.3115/1073083.1073135) were chosen as the most frequently used and practical, they will have quotes and anyone who wants can take a closer look at them. I will leave my table with a brief summary of their main properties and criteria.
@@ -296,6 +350,8 @@ Special thanks to **Ing. Martin Kostelník** for his invaluable guidance and sup
 
 [6] AMD. ROCm™: Open software platform for accelerated computing [online]. [accessed 2025-04-18]. Available at: https://www.amd.com/en/products/software/rocm.html
 
-[7] PAPINENI, Kishore, ROUKOS, Salim, WARD, Todd, and ZHU, Wei-Jing. BLEU [online]. In: Proceedings of the 40th Annual Meeting on Association for Computational Linguistics - ACL '02, Morristown, NJ, USA: Association for Computational Linguistics, 2002, p. 311. [cit. 2025-04-18]. Available at: https://doi.org/10.3115/1073083.1073135
+[7] PAPINENI, Kishore, ROUKOS, Salim, WARD, Todd, and ZHU, Wei-Jing. BLEU [online]. In: Proceedings of the 40th Annual Meeting on Association for Computational Linguistics - ACL '02, Morristown, NJ, USA: Association for Computational Linguistics, 2002, p. 311. [accesed. 2025-04-18]. Available at: https://doi.org/10.3115/1073083.1073135
 
-[8] LIN, Chin-Yew. ROUGE: A package for automatic evaluation of summaries [online]. In: Text Summarization Branches Out: Proceedings of the ACL-04 Workshop, Barcelona, Spain, 2004, pp. 74–81. [cit. 2025-04-18]. Available at: https://aclanthology.org/W04-1013.pdf
+[8] LIN, Chin-Yew. ROUGE: A package for automatic evaluation of summaries [online]. In: Text Summarization Branches Out: Proceedings of the ACL-04 Workshop, Barcelona, Spain, 2004, pp. 74–81. [accessed. 2025-04-18]. Available at: https://aclanthology.org/W04-1013.pdf
+
+[9] GitHub. ChitChat Dataset [accessed. 2025-04-18]. Available at: https://github.com/microsoft/botframework-cli/blob/main/packages/qnamaker/docs/chit-chat-dataset.md
