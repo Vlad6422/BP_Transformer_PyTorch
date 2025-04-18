@@ -108,7 +108,7 @@ if __name__ == "__main__":
     pad_token_id = tokenizer.pad_token_id
 
     # Generate the model path based on the config file (same as before)
-    model_path = f'{config["save_model_path"]}_{config["num_epochs"]}.pt'
+    model_path = f'{config["save_model_path"]}.pt'
 
     # Load the model
     model = load_model(config, model_path, tokenizer)

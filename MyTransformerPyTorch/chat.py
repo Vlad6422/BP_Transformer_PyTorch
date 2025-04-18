@@ -78,7 +78,7 @@ if __name__ == "__main__":
     config["device"] = device
 
     tokenizer = AutoTokenizer.from_pretrained("gpt2")
-    model_path = f'{config["save_model_path"]}_{config["num_epochs"]}.pt'
+    model_path = f'{config["save_model_path"]}.pt'
     special_tokens = {"bos_token": "<sos>", "pad_token": "<pad>"}
     tokenizer.add_special_tokens(special_tokens)
     sos_token = tokenizer.bos_token_id
