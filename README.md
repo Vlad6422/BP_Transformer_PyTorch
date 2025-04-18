@@ -8,14 +8,23 @@
 
 - [Introduction](#introduction)
 - [Installation](#installation)
+- [Using](#using)
+   - [Hyperparams and Configuration](#hyperparams-and-configuration)
+   - [Training](#training)
+   - [Chatting](#chatting)
 - [Language and Framework](#language-and-framework)
   - [Additional Libraries](#additional-libraries)
+- [Architecture](#architecture)
+   - [Retrieval-Based](#retrieval-based)
+   - [Transformer](#transformer)
+
+- [Training Validation]()
 - [Metrics](#metrics)
 - [LICENSE](#license)
 - [REFERENCES](#references)
 ## Introduction 
 
-This is an **Introduction** to my Bachelor's project. My task in this work was to write a chatbot based on deep neural networks. Open sources, as well as articles, documentation for the frameworks used, etc. were used in writing the work. My goal was to write a chat bot, which resulted in writing several different ones at once on different architectures, with varying degrees of complexity and productivity. As a result, it was decided to stay with 2 types, the simplest and fastest, and at the moment of writing this work, the newest and most effective chat bot based on the **Transformer Architecture** [[7]](https://proceedings.neurips.cc/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf).
+This is an **Introduction** to my Bachelor's project. My task in this work was to write a chatbot based on deep neural networks. Open sources, as well as articles, documentation for the frameworks used, etc. were used in writing the work. My goal was to write a chat bot, which resulted in writing several different ones at once on different architectures, with varying degrees of complexity and productivity. As a result, it was decided to stay with 2 types, the simplest and fastest, and at the moment of writing this work, the newest and most effective chat bot based on the **Transformer Architecture** [[7]](https://proceedings.neurips.cc/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf), for example first of chat-bots on this architecrute was BERT [[2]](https://aclanthology.org/N19-1423/), in 2025 year most of peeople know Chat-Gpt, Deepseek they are very popular in this century, you can freely find them in web and free try.
 
 
 A detailed description of the theory, discussions of these different architectures, metrics, testing with people can be found in my text work, it describes everything that is needed even for a person who has never worked with Machine Learning or AI. In my thesis I describe in detail from the theory of machine learning to creating chatbots, how they work and testing them. You can find the text and my bachelor's thesis at this link [[8]](https://www.vut.cz/en/students/final-thesis/detail/164616)
@@ -38,6 +47,58 @@ Everyone has different devices, so it is impossible to predict everything exactl
 
 All training and launch were carried out on my personal laptop with Windows 11 operating system and RTX 3050 ti.
 
+## Using
+This section will cover how to use the program. From training and setup to starting communication.
+
+### Hyperparams and Configuration
+In the directory with each model you will find a **config.json** file, depending on the model you choose, its hyperparameters differ. The path to the dataset and where to save the model are also set in json. Arguments when running a python file can only be selected when chatting. This approach was chosen because when testing the application I often changed datasets and settings and often forgot to write arguments directly in the console when training, so it was chosen that for training everything would be stored in .json format so that it would be convenient to make a preset for training.
+### Training
+Section on how to set up and launch training. Below you will see what the **config.json** for each model looks like. Before starting training, I advise you to customize them for yourself and your needs. You can run training via `python3 ./train.py`. After training, you will receive the model itself, text training results with metrics, loss, as well as graphs, etc.
+#### Retrieval-Based Config
+
+```json
+{
+  "num_epochs": "Number of times the entire training dataset is passed through the model",
+  "batch_size": "Number of training samples used in one iteration",
+  "learning_rate": "Step size for updating model weights",
+  "hidden_size": "Number of units in hidden layers",
+  "train_split": "Proportion of data used for training vs validation",
+  "early_stopping": {
+    "patience": "Number of epochs to wait before stopping training if no improvement"
+  },
+  "dataset_path": "Path to the input dataset",
+  "save_model_path": "Path where the trained model will be saved"
+}
+```
+#### Transformer Config
+```json
+{
+  "vocab_size": "Number of unique tokens in the vocabulary",
+  "d_model": "Size of the embedding dimension",
+  "nhead": "Number of attention heads",
+  "num_encoder_layers": "Number of transformer encoder layers",
+  "num_decoder_layers": "Number of transformer decoder layers",
+  "dim_feedforward": "Dimension of the feedforward network",
+  "max_seq_length": "Maximum length of input/output sequences",
+  "dropout": "Dropout probability for regularization",
+  "batch_size": "Number of training samples used in one iteration",
+  "learning_rate": "Step size for updating model weights",
+  "num_epochs": "Number of times the entire training dataset is passed through the model",
+  "device": "Hardware used for training: 'cuda' for GPU, 'cpu' otherwise",
+  "dataset_path": "Path to the input dataset",
+  "save_model_path": "Path where the trained model will be saved"
+}
+```
+
+### Chatting
+The chat is launched via `python3 ./chat.py`. It pulls in information about hyperparameters and the model to launch from **config.json**, so everything there should be configured for the model you are going to launch. After that, you can safely write to the console. For the Transformer model, you can also launch a more lively chat using `python3 ./life_chat.py [--temperature] [--top_k] [--config]`. It has the following console arguments:
+```
+--temperature: (float, default=1.4) – Controls the randomness of the text generation. Higher values produce more diverse outputs.
+
+--top_k: (int, default=3) – Limits sampling to the top K most probable next tokens. Set to 0 to disable top-k sampling.
+
+--config: (str, default="config.json") – Path to the configuration file specifying model and hyperparameters. You can create your own custom config and use 1 config for training, another to chat.
+```
 
 ## Language and Framework
 
@@ -51,6 +112,14 @@ Python was chosen because of the many ready-made libraries that speed up develop
 - **Utilities**: `matplotlib.pyplot`, `time`, `math`, `sklearn.model_selection.train_test_split`   
 
 This is only a part, all the rest are written in the **requirements.txt** file, mainly these are all sorts of libraries for json processing, recording the training time, drawing graphs, cutting words and additional functionality, mostly not related to the training itself.
+
+## Architecture
+Architectures used in chat bot models will be briefly described in this section.
+### Retrieval-Based
+
+### Transformer
+
+## Training Validation
 
 ## Metrics
 
@@ -68,15 +137,11 @@ Of the metrics, ROUGE [[14]](https://aclanthology.org/W04-1013.pdf) and BLEU [[1
 | **Text Matching Style**     | Strict matching (ideal for translations)         | More flexible (ideal for summaries)                                |
 | **Output Range**            | 0–1 (or 0–100%)                                  | 0–1 (or 0–100%), usually with precision, recall, and F1            |
 
-
 ## License  
 This project is licensed under the terms of the [MIT License](LICENSE).  
 
-
-
 ## Acknowledgments  
 Special thanks to **Ing. Martin Kostelník** for his invaluable guidance and support throughout my work. Also for advice and help with theory and help with studying machine learning from scratch. Throughout the writing of the work we were in contact and you often helped me in solving my problems.
-
 
 ## REFERENCES
 
