@@ -8,6 +8,9 @@
 
 - [Introduction](#introduction)
 - [Installation](#installation)
+- [Language and Framework](#language-and-framework)
+  - [Additional Libraries](#additional-libraries)
+- [Metrics](#metrics)
 - [LICENSE](#license)
 - [REFERENCES](#references)
 ## Introduction 
@@ -42,14 +45,28 @@ The project was written in Python 3.11.9 [[10]](python.org/downloads/release/pyt
 
 Python was chosen because of the many ready-made libraries that speed up development, the PyTorch framework was also chosen for Python, since it is one of the most popular frameworks for Machine Learning at the moment, and taking into account these 2 factors, Python and PyTorch cannot be without each other, so they were chosen as the main language and framework. CUDA was chosen because Nvidia at the time of 2025 is almost a monopoly in the field of machine learning and the only one who provides video cards and software that accelerates any training, at the moment there is only one alternative available to the average user, these are AMD video cards and ROCm [[12]](https://www.amd.com/en/products/software/rocm.html) software, but it is only supported on Linux, recently WSL support was added, but even so, at the moment ROCm is very behind CUDA in training speed, as soon as the software is improved, it will be a good reason to try to run training on an AMD video card.
 
-## Libraries  
+### Additional Libraries 
 - **Data Handling**: `json`, `pandas`, `datasets`, `random`  
 - **Text Processing**: `nltk`, `nltk.stem.porter`, `re`    
 - **Utilities**: `matplotlib.pyplot`, `time`, `math`, `sklearn.model_selection.train_test_split`   
 
+This is only a part, all the rest are written in the **requirements.txt** file, mainly these are all sorts of libraries for json processing, recording the training time, drawing graphs, cutting words and additional functionality, mostly not related to the training itself.
+
 ## Metrics
 
+Of the metrics, ROUGE [[14]](https://aclanthology.org/W04-1013.pdf) and BLEU [[13]](https://doi.org/10.3115/1073083.1073135) were chosen as the most frequently used and practical, they will have quotes and anyone who wants can take a closer look at them. I will leave my table with a brief summary of their main properties and criteria.
 
+| Feature                      | **BLEU** (Bilingual Evaluation Understudy)       | **ROUGE** (Recall-Oriented Understudy for Gisting Evaluation)      |
+|-----------------------------|--------------------------------------------------|---------------------------------------------------------------------|
+| **Primary Use**             | Machine Translation                              | Summarization, Text Generation                                     |
+| **Approach**                | Precision-based                                  | Recall-based (can include F1 score)                                |
+| **What It Measures**        | Overlap of n-grams between generated and reference text | Overlap of n-grams, sequences, and word pairs                      |
+| **Metric Types**            | BLEU-1, BLEU-2, ..., BLEU-4                       | ROUGE-N, ROUGE-L, ROUGE-S, etc.                                    |
+| **Length Penalty**          | Yes (Brevity Penalty)                            | Not always applied                                                  |
+| **Paraphrase Tolerance**    | Low                                              | Higher (especially with ROUGE-L)                                   |
+| **Sensitivity to Word Order**| High                                            | ROUGE-L considers order, ROUGE-N does not                          |
+| **Text Matching Style**     | Strict matching (ideal for translations)         | More flexible (ideal for summaries)                                |
+| **Output Range**            | 0–1 (or 0–100%)                                  | 0–1 (or 0–100%), usually with precision, recall, and F1            |
 
 
 ## License  
