@@ -18,8 +18,8 @@ from model import NeuralNet
 with open('config.json', 'r') as config_file:
     config = json.load(config_file)
 
-# Load intents
-with open('output.json', 'r') as f:
+# Load intents using the path from config
+with open(config["dataset_path"], 'r') as f:
     intents = json.load(f)
 
 # Prepare the dataset
@@ -177,7 +177,7 @@ data = {
     "tags": tags
 }
 
-FILE = "data.pth"
+FILE = config["save_model_path"] + ".pth"
 torch.save(data, FILE)
 
 # After plotting training and validation loss
