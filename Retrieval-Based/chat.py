@@ -9,13 +9,14 @@ from model import NeuralNet
 from preProcessing import bag_of_words, tokenize
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
+with open("config.json", "r") as f:
+    config = json.load(f)
 # Load intents from JSON file
-with open('output.json', 'r') as json_data:
+with open(config["dataset_path"], 'r') as json_data:
     intents = json.load(json_data)
 
 # Load trained model data
-FILE = "data.pth"
+FILE = config["save_model_path"]+".pth"
 data = torch.load(FILE)
 
 input_size = data["input_size"]

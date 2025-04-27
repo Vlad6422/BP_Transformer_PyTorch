@@ -64,8 +64,8 @@ class Transformer(nn.Module):
         """
         tgt_seq_length = tgt_tokens.size(1)
 
-        src_mask = (src_tokens == 50258)
-        trg_mask = (tgt_tokens == 50258)
+        src_mask = (src_tokens == 50258) # Pad token
+        trg_mask = (tgt_tokens == 50258) # Pad token
         
         tgt_mask = self._generate_square_subsequent_mask(tgt_seq_length).to(tgt_tokens.device) # decoder mask
         
