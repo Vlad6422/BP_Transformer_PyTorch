@@ -3,13 +3,13 @@
 # Description: This file contains the implementation of training the neural network model for a chatbot.
 
 import numpy as np
-import random
 import json
 import matplotlib.pyplot as plt
 
 import torch
 import torch.nn as nn
-from torch.utils.data import Dataset, DataLoader, random_split
+from torch.utils.data import DataLoader, random_split
+from dataset import ChatDataset
 
 from preProcessing import bag_of_words, tokenize, stem
 from model import NeuralNet
@@ -65,23 +65,9 @@ learning_rate = config['learning_rate']
 input_size = len(X_train[0])
 hidden_size = config['hidden_size']
 output_size = len(tags)
-print(input_size, output_size)
-
-# Create a dataset
-class ChatDataset(Dataset):
-    def __init__(self):
-        self.n_samples = len(X_train)
-        self.x_data = X_train
-        self.y_data = y_train
-
-    def __getitem__(self, index):
-        return self.x_data[index], self.y_data[index]
-
-    def __len__(self):
-        return self.n_samples
 
 # Create the dataset
-dataset = ChatDataset()
+dataset = ChatDataset(X_train, y_train)
 
 # Split the dataset into training and validation sets
 train_size = int(config['train_split'] * len(dataset))  # Percentage for training
@@ -177,7 +163,7 @@ data = {
     "tags": tags
 }
 
-FILE = config["save_model_path"] + ".pth"
+FILE = config["save_model_path"] + ".pth" # Can be pt
 torch.save(data, FILE)
 
 # After plotting training and validation loss
