@@ -42,8 +42,16 @@ I will start with a short list where I will describe the language used, framewor
 2. Install dependencies:  
    ```bash
    pip install -r requirements.txt
-   ```  
+   ```
+3. Install PyTorch (Nvidia GPU):  
+   ```bash
+   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
+   ```
+4. If step 2 shows errors, you will need to intall ntlk, matplotlib and all libraries mannually. (They will shown when you try to run train/chat)
+
 Everyone has different devices, so it is impossible to predict everything exactly, but the project does not use non-standard operating systems or programming languages, etc. Therefore, the project must work on Windows, it was tested on Windows 10 and 11, at least Python must be installed, optionally CUDA [[3]](https://developer.nvidia.com/cuda-toolkit) from Nvidia to speed up training. The remaining libraries are installed either with the help of the script described above. Or manually if necessary. Creating a virtual environment for such tasks is unnecessary and an additional layer greatly slows down training, and this was not part of my assignment.
+
+From my experience of installing on an empty device, it will be enough to download python (Tested with 3.12 and 3.13), installing from the requirements.txt file does not always work, so at least you need to download pythorch and cuda (https://pytorch.org/). This command works for me (pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126) this is Windows and Nvidia GPU. After that you can try to start train.py via **python3 ./train.py** and than using pip or pip3 you will need to install libaries like transformer,ntlk,matplotlib atd.
 
 All training and launch were carried out on my personal laptop with Windows 11 operating system and RTX 3050 ti.
 
