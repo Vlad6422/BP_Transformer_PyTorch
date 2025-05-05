@@ -4,6 +4,7 @@ from model import Transformer
 import json
 import torch.nn.functional as F 
 import argparse
+import time
 
 def load_config(config_path):
     with open(config_path, "r") as f:
@@ -25,6 +26,45 @@ def load_model(config, model_path, tokenizer):
     model = model.to(config["device"])
     model.eval()
     return model
+
+def generate_response_real_time(model, tokenizer, src_text, config, sos_token, eos_token, temperature=1.4, top_k=3):
+    src_tokens = tokenizer.encode(src_text, add_special_tokens=True)
+    src_tokens = torch.tensor(src_tokens).unsqueeze(0).to(config["device"])
+    max_seq_length = config["max_seq_length"]
+    pad_token = 50258
+
+    if src_tokens.size(1) < max_seq_length:
+        src_tokens = F.pad(src_tokens, (0, max_seq_length - src_tokens.size(1)), value=pad_token)
+
+    generated_tokens = torch.full((1, 1), sos_token, dtype=torch.long).to(config["device"])
+
+    print("Bot: ", end="", flush=True)
+
+    for _ in range(max_seq_length):
+        with torch.no_grad():
+            output = model(src_tokens, generated_tokens)
+            logits = output[:, -1, :] / temperature
+
+            if top_k > 0:
+                top_k_values, top_k_indices = torch.topk(logits, top_k, dim=-1)
+                probs = F.softmax(top_k_values, dim=-1)
+                next_token = top_k_indices.gather(
+                    dim=1, index=torch.multinomial(probs, num_samples=1)
+                ).squeeze(-1)
+            else:
+                probs = F.softmax(logits, dim=-1)
+                next_token = torch.multinomial(probs, num_samples=1).squeeze(-1)
+
+        generated_tokens = torch.cat([generated_tokens, next_token.unsqueeze(-1)], dim=-1)
+
+        token_str = tokenizer.decode(next_token.item(), skip_special_tokens=True)
+        print(token_str, end="", flush=True)
+        time.sleep(0.03)
+
+        if next_token.item() == eos_token:
+            break
+
+    print()
 
 def generate_response(model, tokenizer, src_text, config, sos_token, eos_token, temperature=1.4, top_k=3):
     """
@@ -74,21 +114,25 @@ def generate_response(model, tokenizer, src_text, config, sos_token, eos_token, 
     response_text = tokenizer.decode(generated_tokens.squeeze(0).tolist(), skip_special_tokens=True)
     return response_text
 
-def chat_with_bot(model, tokenizer, config, sos_token, eos_token, temperature, top_k):
+def chat_with_bot(model, tokenizer, config, sos_token, eos_token, temperature, top_k, real_time=False):
     print("Chatbot is ready! Type 'exit' to quit.")
     while True:
         user_input = input("You: ")
         if user_input.lower() == "exit":
             print("Goodbye!")
             break
-        response = generate_response(model, tokenizer, user_input, config, sos_token, eos_token, temperature, top_k)
-        print(f"Bot: {response}")
+        if real_time:
+            generate_response_real_time(model, tokenizer, user_input, config, sos_token, eos_token, temperature, top_k)
+        else:
+            response = generate_response(model, tokenizer, user_input, config, sos_token, eos_token, temperature, top_k)
+            print(f"Bot: {response}")
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Chat with the Transformer-based chatbot.")
     parser.add_argument('--temperature', type=float, default=1.4, help='Temperature for generation (higher is more random)')
     parser.add_argument('--top_k', type=int, default=3, help='Top-K for sampling (0 means no top-K sampling)')
     parser.add_argument('--config', type=str, default="config.json", help='Path to the config file')
+    parser.add_argument('--real-time', action='store_true', help='Generate and print response in real-time')
     return parser.parse_args()
 
 if __name__ == "__main__":
@@ -114,4 +158,5 @@ if __name__ == "__main__":
     model = load_model(config, model_path, tokenizer)
 
     # Start the chatbot
-    chat_with_bot(model, tokenizer, config, sos_token, eos_token, args.temperature, args.top_k)
+    chat_with_bot(model, tokenizer, config, sos_token, eos_token, args.temperature, args.top_k, args.real_time)
+
