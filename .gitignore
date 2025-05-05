@@ -10,3 +10,4 @@ TEMP
 usersGraphsGenerator.py
 config.json
 Doctor_AI.txt
+model_doctorAI_Big.pt
