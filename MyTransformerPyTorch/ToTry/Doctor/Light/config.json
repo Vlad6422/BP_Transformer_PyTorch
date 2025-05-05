@@ -12,5 +12,5 @@
   "num_epochs": 10,
   "device": "cuda",
   "dataset_path": "datasets/ChitChat.txt",
-  "save_model_path": "saved/model_doctorAI_Big_10"
+  "save_model_path": "ToTry/Doctor/Light/model_doctorAI_Light"
 }
