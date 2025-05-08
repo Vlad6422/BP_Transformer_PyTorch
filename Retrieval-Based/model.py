@@ -4,19 +4,19 @@
 
 import torch.nn as nn
 
-# Define the neural network architecture
+# Neural Network Class for Chatbot
 class NeuralNet(nn.Module):
     def __init__(self, input_size, hidden_size, num_classes):
         super(NeuralNet, self).__init__()
-        # Define the layers of the neural network
+        # Linear layers
         self.l1 = nn.Linear(input_size, hidden_size)
         self.dropout1 = nn.Dropout(0.1)  
         self.l2 = nn.Linear(hidden_size, hidden_size)
         self.dropout2 = nn.Dropout(0.1)  
         self.l3 = nn.Linear(hidden_size, num_classes)
-        # Define the activation function
+        # Activation function
         self.relu = nn.ReLU()
-    # Define the forward pass
+    # Forward pass
     def forward(self, x):
         out = self.l1(x)
         out = self.relu(out)

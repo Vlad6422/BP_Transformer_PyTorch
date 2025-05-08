@@ -82,7 +82,7 @@ class Transformer(nn.Module):
         
         tgt_embeddings = self._apply_padding_mask(tgt_embeddings, trg_mask)
         
-        memory  = self.transformer_encoder(src_embeddings.permute(1, 0, 2), src_key_padding_mask=src_mask) # [src_seq_length, batch_size, d_model] natch fitsy
+        memory  = self.transformer_encoder(src_embeddings.permute(1, 0, 2), src_key_padding_mask=src_mask) # [src_seq_length, batch_size, d_model]
         memory[src_mask.T] = 0
 
         output = self.transformer_decoder(
